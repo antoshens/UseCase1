@@ -89,5 +89,20 @@ namespace UseCase1.Controllers
 
             return countries;
         }
+
+        private IEnumerable<Country> LimitRecords(IEnumerable<Country> countries, int recordsLimit)
+        {
+            if (recordsLimit < 0)
+            {
+                return countries;
+            }
+
+            if (countries is null)
+            {
+                return null;
+            }
+
+            return countries.Take(recordsLimit);
+        }
     }
 }
