@@ -14,7 +14,7 @@ namespace UseCase1.Controllers
         }
 
         [HttpGet]
-        [Route("api/countries/{name?}/{limit?}/{population?}")]
+        [Route("api/countries")]
         public async Task<IActionResult> GetCountries(string name, int limit, string population)
         {
             try
@@ -32,6 +32,14 @@ namespace UseCase1.Controllers
                 return BadRequest("Unable to load countries.");
 #endif
             }
+        }
+
+        private IEnumerable<Country> FilterCountries(IEnumerable<Country> countries, string filterStr)
+        {
+            if (countries is null)
+                return null;
+
+            return countries.Where(c => c.Name.Official.Contains(filterStr) || c.Name.Common.Contains(filterStr));
         }
     }
 }
