@@ -1,3 +1,5 @@
+using UseCase1.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +8,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
@@ -23,3 +27,15 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+void ConfigureServices(IServiceCollection services)
+{
+    services.AddHttpClient("usecase1", cl =>
+    {
+        cl.BaseAddress = new Uri("https://restcountries.com/");
+    });
+
+
+    services.AddScoped<IHttpClientService, HttpClientService>();
+}
