@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UseCase1.Models.UseCase1.Models;
+using UseCase1.Models;
 using UseCase1.Services;
 
 namespace UseCase1.Controllers
@@ -38,18 +38,56 @@ namespace UseCase1.Controllers
 
         private IEnumerable<Country> FilterByName(IEnumerable<Country> countries, string filterStr)
         {
-            if (countries is null)
-                return null;
+            if (string.IsNullOrWhiteSpace(filterStr))
+            {
+                return countries;
+            }
 
-            return countries.Where(c => c.Name.Official.Contains(filterStr) || c.Name.Common.Contains(filterStr));
+            if (countries is null)
+            {
+                return null;
+            }
+
+            return countries.Where(c => c.Name.Common.Contains(filterStr));
         }
 
         private IEnumerable<Country> FilterByPopulation(IEnumerable<Country> countries, int maxPopulation)
         {
+            if (maxPopulation <= 0)
+            {
+                return countries;
+            }
+
             if (countries is null)
+            {
                 return null;
+            }
 
             return countries.Where(c => c.Population < maxPopulation * POPULATION_MULTIPLIER);
+        }
+
+        private IEnumerable<Country> SortCountries(IEnumerable<Country> countries, string sortOrder)
+        {
+            if (string.IsNullOrWhiteSpace(sortOrder))
+            {
+                return countries;
+            }
+
+            if (countries is null)
+            {
+                return null;
+            }
+
+            if (sortOrder.Equals("ascend", StringComparison.OrdinalIgnoreCase) || sortOrder.Equals("asc", StringComparison.OrdinalIgnoreCase))
+            {
+                return countries.OrderBy(c => c.Name.Common).AsEnumerable();
+            }
+            else if (sortOrder.Equals("descend", StringComparison.OrdinalIgnoreCase) || sortOrder.Equals("desc", StringComparison.OrdinalIgnoreCase))
+            {
+                return countries.OrderByDescending(c => c.Name.Common).AsEnumerable();
+            }
+
+            return countries;
         }
     }
 }
