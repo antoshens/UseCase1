@@ -97,7 +97,7 @@ namespace UseCase1.Controllers
 
         private IEnumerable<Country> LimitRecords(IEnumerable<Country> countries, int recordsLimit)
         {
-            if (recordsLimit < 0)
+            if (recordsLimit <= 0)
             {
                 return countries;
             }
