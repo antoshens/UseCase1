@@ -99,6 +99,9 @@
 
             [JsonPropertyName("postalCode")]
             public PostalCode? PostalCode { get; set; }
+
+            [JsonPropertyName("population")]
+            public int Population { get; set; }
         }
     }
 }

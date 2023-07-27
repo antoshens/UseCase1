@@ -6,6 +6,8 @@ namespace UseCase1.Controllers
 {
     public class HomeController : Controller
     {
+        private const int POPULATION_MULTIPLIER = 1000000;
+
         private readonly IHttpClientService _httpClient;
 
         public HomeController(IHttpClientService httpClient)
@@ -34,12 +36,20 @@ namespace UseCase1.Controllers
             }
         }
 
-        private IEnumerable<Country> FilterCountries(IEnumerable<Country> countries, string filterStr)
+        private IEnumerable<Country> FilterByName(IEnumerable<Country> countries, string filterStr)
         {
             if (countries is null)
                 return null;
 
             return countries.Where(c => c.Name.Official.Contains(filterStr) || c.Name.Common.Contains(filterStr));
+        }
+
+        private IEnumerable<Country> FilterByPopulation(IEnumerable<Country> countries, int maxPopulation)
+        {
+            if (countries is null)
+                return null;
+
+            return countries.Where(c => c.Population < maxPopulation * POPULATION_MULTIPLIER);
         }
     }
 }
