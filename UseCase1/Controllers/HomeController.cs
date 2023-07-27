@@ -17,13 +17,18 @@ namespace UseCase1.Controllers
 
         [HttpGet]
         [Route("api/countries")]
-        public async Task<IActionResult> GetCountries(string name, int limit, string population)
+        public async Task<IActionResult> GetCountries(string name, int limit, string sortOrder, int population)
         {
             try
             {
                 var countries = await _httpClient.SendGetAsync<List<Country>>("v3.1/all");
 
-                return Ok(countries);
+                var response = LimitRecords(countries, limit);
+                response = FilterByName(response, name);
+                response = FilterByPopulation(response, population);
+                response = SortCountries(response, sortOrder);
+
+                return Ok(response);
             }
             catch(Exception ex)
             {
